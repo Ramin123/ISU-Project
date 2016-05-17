@@ -3,9 +3,11 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.*;
 
 public class Target{
-	double xCordTarget = 400, yCordTarget = 40;
-	double rand;
-	Boolean paintTarget;
+	double xCordTarget = 400, yCordTarget = 40, rand;
+	private int size;
+	private Boolean paintTarget;
+	private Color color;
+	
 	public Target(){
 		genTarget();
 	}
