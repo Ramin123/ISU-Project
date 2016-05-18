@@ -94,7 +94,7 @@ public class Leg extends JFrame{
 						kickLabel.setBounds(80,5,60,60);
 						doFunction(0);
 						xSpeed = speed;
-						ySpeed = speed;		
+						ySpeed = -speed;		
 						animator.start();
 						leg.draw();
 						PowerTracker.stop();
@@ -123,35 +123,30 @@ public class Leg extends JFrame{
 		leg.add(moneyLabel);
 		leg.add(bar);	
 		leg.add(kickLabel);
-		animator = new Timer(5, new ActionListener(){
+		animator = new Timer(20, new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					counter++;
-					//System.out.println(yCordBall + "     " + ySpeed + "   " + counter);
 					
-					if(counter<10){
-						moveBall();
-						kickEnabled = false;
-					}else{
-						
-						if(yCordBall+Math.abs(ySpeed)<= yBoundary){ /////FIX HERE
-							moveBall(); //combined Code
-						}else if(ySpeed<=0){
-							bounceCounter++;
-							yCordBall = yBoundary;
-							xCordBall+=xSpeed;
-							ySpeed*=-0.5;
-							xSpeed*=0.6;
-							for(int i=0;i<5;i++){
-								moveBall();
-							//System.out.println(yCordBall + "   //  " + ySpeed + "   " + counter);
-								}
-							if(bounceCounter >=6){
-								resetBall();
-							}//if
-						}//else
-					}//else	
-				}//while	
-			});//Timer;	
+					for(int i = 0; i < 10; i++){
+						if (xCordBall + xSpeed / 10.0 >= 809 - 26 || xCordBall <= 0){
+							xSpeed *= -.8;
+							ySpeed *= .8;
+						} else if (yCordBall + ySpeed / 10.0 >= 306 - 54 || yCordBall <= -6){
+							ySpeed *= -.8;
+							xSpeed *= .8;
+						}
+						xCordBall += xSpeed / 10.0;
+						yCordBall += ySpeed / 10.0;
+						leg.draw();
+						checkCollision();
+						if (Math.hypot(xSpeed, ySpeed) < 1){
+							resetBall();
+						}
+					}
+					ySpeed += g;
+					
+					
+				}//action performed	
+			});//animator;	
 		setVisible(true);
 	}//Leg
 	public void resetBall(){
@@ -161,40 +156,8 @@ public class Leg extends JFrame{
 		leg.draw();
 		animator.stop();
 		speed = 5;
-		bounceCounter =0;
-		PowerTracker.stop();
 		bar.setValue(0);
 		kickEnabled = true;
-	}
-	public void moveBall(){
-		if (counter > 20){
-			angle = 0.6; 
-			xCord = 70;
-			yCord = -45;
-			leg.draw();
-		}
-		
-			yCordBall-=ySpeed;
-			xCordBall+=xSpeed;
-			if (xCordBall >=770 ){
-				xCordBall = 770;
-				xSpeed*=-0.5;
-				ySpeed*=0.6;
-				
-			}
-			if (xCordBall <=1 ){
-				xCordBall = 1;
-				xSpeed*=-0.5;
-				
-			}
-			if (yCordBall <=0){
-				yCordBall = 1;
-				ySpeed*=-0.6;
-			}
-			ySpeed-=g; 
-			leg.draw();
-			checkCollision();
-		
 	}
 	
 	/*	
