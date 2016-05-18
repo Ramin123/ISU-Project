@@ -21,7 +21,7 @@ public class Leg extends JFrame{
 	private JLabel moneyLabel = new JLabel();
 	private DrawLeg leg = new DrawLeg();
 	private Target target = new Target();
-	private Timer timer,PowerTracker;
+	private Timer animator,PowerTracker;
 	private JProgressBar bar = new JProgressBar(0,30);
 	private JLabel kickLabel = new JLabel();
 		
@@ -41,6 +41,7 @@ public class Leg extends JFrame{
     */
 	public Leg(){
 		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Kick Foot Game");
 		setSize(809,306);
 		setLocation(dim.width/2 - 404, dim.height/2 - 153);	//frame is at the center of the screen
@@ -80,6 +81,7 @@ public class Leg extends JFrame{
 						kickImg = getImg.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 						kickIcon = new ImageIcon(kickImg);
 						kickLabel.setIcon(kickIcon);
+						kickLabel.setBounds(85,10,50,50);
 						PowerTracker.start();
 						counter = 0;
 					}
@@ -89,10 +91,11 @@ public class Leg extends JFrame{
 						kickImg = getImg.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 						kickIcon = new ImageIcon(kickImg);
 						kickLabel.setIcon(kickIcon);
+						kickLabel.setBounds(80,5,60,60);
 						doFunction(0);
 						xSpeed = speed;
 						ySpeed = speed;		
-						timer.start();
+						animator.start();
 						leg.draw();
 						PowerTracker.stop();
 					}
@@ -120,7 +123,7 @@ public class Leg extends JFrame{
 		leg.add(moneyLabel);
 		leg.add(bar);	
 		leg.add(kickLabel);
-		timer = new Timer(5, new ActionListener(){
+		animator = new Timer(5, new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					counter++;
 					//System.out.println(yCordBall + "     " + ySpeed + "   " + counter);
@@ -156,7 +159,7 @@ public class Leg extends JFrame{
 		yCordBall = 250;
 		ySpeed =0;
 		leg.draw();
-		timer.stop();
+		animator.stop();
 		speed = 5;
 		bounceCounter =0;
 		PowerTracker.stop();
