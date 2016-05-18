@@ -44,7 +44,6 @@ public class Leg extends JFrame{
 		setTitle("Kick Foot Game");
 		setSize(809,306);
 		setLocation(dim.width/2 - 404, dim.height/2 - 153);	//frame is at the center of the screen
-		setVisible(true);
 		this.setResizable(false);
 		bar.setValue(0);
 		//bar.setStringPainted(true);
@@ -54,7 +53,7 @@ public class Leg extends JFrame{
 		
 		
 		try{
-			getImg = ImageIO.read(new File("kick.png"));
+			getImg = ImageIO.read(new File("src/kick.png"));
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
@@ -156,6 +155,7 @@ public class Leg extends JFrame{
 					}//else	
 				}//while	
 			});//Timer;	
+		setVisible(true);
 	}//Leg
 	public void resetBall(){
 		xCordBall = 105;
@@ -243,7 +243,7 @@ public class Leg extends JFrame{
 		setLayout(null);
 		
 		try {                
-			image = ImageIO.read(new File("beach background good.jpg"));
+			image = ImageIO.read(new File("src/beach background good.jpg"));
 	    } catch (IOException ex) {
 	    	System.out.println("No image could be found");
 	    }
