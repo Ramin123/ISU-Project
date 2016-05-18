@@ -64,17 +64,11 @@ public class Leg extends JFrame{
 		
 		PowerTracker = new Timer(50, new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				speed+=1;
-				bar.setValue((int) speed-5);
-				if (bar.getValue()>22)
-					bar.setForeground(Color.RED);
-				else if (bar.getValue()>15)
-					bar.setForeground(Color.ORANGE);
-				else if (bar.getValue()>8)
-					bar.setForeground(Color.YELLOW);
-				else
-					bar.setForeground(Color.GREEN);
-						
+				if (speed - 5 < bar.getMaximum()){
+					speed+=1;
+					bar.setValue((int) speed-5);
+					bar.setForeground(new Color(255 * (int) (speed - 5) / bar.getMaximum(), 255 * (int) (bar.getMaximum() - speed + 5) / bar.getMaximum(), 0));
+				}			
 			}	
 		});
 		kickButton.setText("Kick");
