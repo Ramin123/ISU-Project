@@ -20,11 +20,12 @@ public class Shop extends JFrame{
 	private static Upgrade dragonBall = new Upgrade(10, 6, true);
 	
 	private static Upgrade size = new Upgrade(5, 7, false);
+	private static Upgrade blackTargetChance = new Upgrade(5, 8, false);
 	
 	private DrawShop shop = new DrawShop();
 	private static Color currentColor = Color.BLACK;
 	
-	private final int SIZE_UP_MULTIPLYER = 2;
+	private final int SIZE_UP_MULTIPLYER = 2, BLACK_TARGET_MULTIPLYER = 2;
 	public Shop(){
 		setTitle("Shop!");
 		setSize(610,350);
@@ -127,6 +128,18 @@ public class Shop extends JFrame{
 				}
 			}
 		});	
+		blackTargetChance.getButton().addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				if(blackTargetChance.getButton().isEnabled()){		
+						Leg.money-= size.getPrice();
+						moneyLabel.setText("Coins: " + Leg.money);
+						blackTargetChance.setPrice(blackTargetChance.getPrice()*BLACK_TARGET_MULTIPLYER);
+						blackTargetChance.getButton().setText(blackTargetChance.getPrice() + " Coins");
+						Leg.blTarget.setRarity(Leg.blTarget.getRarity() + 1);
+						checkFunds();
+				}
+			}
+		});	
 		WindowEvent close = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
 		backButton.setFont(font);
 		backButton.setBounds(520, 290, 70, 20);
@@ -148,6 +161,7 @@ public class Shop extends JFrame{
 		shop.add(purpleBall.getButton());
 		shop.add(dragonBall.getButton());
 		shop.add(size.getButton());
+		shop.add(blackTargetChance.getButton());
 		c.add(shop);
 	
 	}//constructor
@@ -186,6 +200,11 @@ public class Shop extends JFrame{
 			size.getButton().setEnabled(true);
 		else
 			size.getButton().setEnabled(false);
+		
+		if (Leg.money >= blackTargetChance.getPrice())
+			blackTargetChance.getButton().setEnabled(true);
+		else
+			blackTargetChance.getButton().setEnabled(false);
 	
 	}
 	public static Color getColor(){
@@ -208,6 +227,15 @@ public class Shop extends JFrame{
 			Ellipse2D yellowBall = new Ellipse2D.Double(Shop.yellowBall.getXLoc(), Shop.yellowBall.getYLoc() ,30,30);
 			Ellipse2D purpleBall = new Ellipse2D.Double(Shop.purpleBall.getXLoc(), Shop.purpleBall.getYLoc() ,30,30);
 			Ellipse2D dragonBall = new Ellipse2D.Double(Shop.dragonBall.getXLoc(), Shop.dragonBall.getYLoc() ,30,30);
+			Ellipse2D targetOutter = new Ellipse2D.Double(Shop.blackTargetChance.getXLoc(), Shop.blackTargetChance.getYLoc(),30,30);
+			Ellipse2D targetMid = new Ellipse2D.Double(Shop.blackTargetChance.getXLoc()+5,Shop.blackTargetChance.getYLoc()+5, 20, 20);
+			Ellipse2D targetInner = new Ellipse2D.Double(Shop.blackTargetChance.getXLoc()+10,Shop.blackTargetChance.getYLoc()+10,10,10);
+			g.setColor(Color.BLACK);
+			g2d.fill(targetOutter);
+			g.setColor(Color.WHITE);
+			g2d.fill(targetMid);
+			g.setColor(Color.BLACK);
+			g2d.fill(targetInner);
 			
 			g.setColor(Color.BLUE);
 			g2d.fill(blueBall);
