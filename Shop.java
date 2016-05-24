@@ -21,11 +21,13 @@ public class Shop extends JFrame{
 	
 	private static Upgrade size = new Upgrade(5, 7, false);
 	private static Upgrade blackTargetChance = new Upgrade(5, 8, false);
+	private static Upgrade levelUp = new Upgrade(15, 9, false);
+	
 	
 	private DrawShop shop = new DrawShop();
 	private static Color currentColor = Color.BLACK;
 	
-	private final int SIZE_UP_MULTIPLYER = 2, BLACK_TARGET_MULTIPLYER = 2;
+	private final int SIZE_UP_MULTIPLYER = 2, BLACK_TARGET_MULTIPLYER = 2, LEVEL_UP_MULTIPLIER = 2;
 	public Shop(){
 		setTitle("Shop!");
 		setSize(610,350);
@@ -131,12 +133,24 @@ public class Shop extends JFrame{
 		blackTargetChance.getButton().addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
 				if(blackTargetChance.getButton().isEnabled()){		
-						Leg.money-= size.getPrice();
+						Leg.money-= blackTargetChance.getPrice();
 						moneyLabel.setText("Coins: " + Leg.money);
 						blackTargetChance.setPrice(blackTargetChance.getPrice()*BLACK_TARGET_MULTIPLYER);
 						blackTargetChance.getButton().setText(blackTargetChance.getPrice() + " Coins");
 						Leg.blTarget.setRarity(Leg.blTarget.getRarity() + 1);
 						checkFunds();
+				}
+			}
+		});
+		levelUp.getButton().addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				if(levelUp.getButton().isEnabled()){		
+						Leg.money-= levelUp.getPrice();
+						moneyLabel.setText("Coins: " + Leg.money);
+						levelUp.setPrice(levelUp.getPrice()*LEVEL_UP_MULTIPLIER);
+						levelUp.getButton().setText(levelUp.getPrice() + " Coins");
+						checkFunds();
+						Leg.LevelUp();
 				}
 			}
 		});	
@@ -162,6 +176,7 @@ public class Shop extends JFrame{
 		shop.add(dragonBall.getButton());
 		shop.add(size.getButton());
 		shop.add(blackTargetChance.getButton());
+		shop.add(levelUp.getButton());
 		c.add(shop);
 	
 	}//constructor
@@ -206,6 +221,10 @@ public class Shop extends JFrame{
 		else
 			blackTargetChance.getButton().setEnabled(false);
 	
+		if (Leg.money >= levelUp.getPrice())
+			levelUp.getButton().setEnabled(true);
+		else
+			levelUp.getButton().setEnabled(false);
 	}
 	public static Color getColor(){
 		return currentColor;

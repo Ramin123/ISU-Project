@@ -21,13 +21,13 @@ public class Leg extends JFrame{
 	private JButton shopButton = new JButton();
 	private JLabel moneyLabel = new JLabel();
 	private DrawLeg leg = new DrawLeg();
-	static RedTarget rTarget = new RedTarget(Color.RED, 1,30);
+	static RedTarget rTarget = new RedTarget(Color.RED, 1000,30);
 	static BlueTarget bTarget = new BlueTarget(Color.BLUE, 5,8);
 	static BlackTarget blTarget = new BlackTarget(Color.BLACK, 25,2);
 	private Timer animator,PowerTracker, legReset, drawTargets ,shakeBar;
 	private JProgressBar bar = new JProgressBar(0,30);
-	private JLabel kickLabel = new JLabel();
-	private ArrayList<Target> Targets = new ArrayList<Target>();	
+	private JLabel kickLabel = new JLabel(), ballCountLabel = new JLabel();
+	private ArrayList<Target> Targets = new ArrayList<Target>();
 	
 		private Image kickImg = null;
 		private BufferedImage getImg = null;
@@ -36,7 +36,7 @@ public class Leg extends JFrame{
 	private double angle = 0.6, xCord = 70, yCord = -45, xCordBall = 105, yCordBall = 250, xSpeed = 0, ySpeed = 0, speed = 5, g = 1,
 			xCordTarget = rTarget.getXCord(), yCordTarget = rTarget.getYCord(), blTargetSpeed = 5;
 	private int counter = 0, numTargetsCounter = 1, numMissesCounter = 0, currentPoints = rTarget.getPoints();
-	static int money = 0, ballSize = 20, adjustYLoc = 5;
+	static int money = 0, ballSize = 20, adjustYLoc = 5, Level = 1, ballCount = 25;
 	private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();	//gets the dimensions of the screen
 	private Boolean kickEnabled = true, targetHit = false;
 	/*	
@@ -52,11 +52,15 @@ public class Leg extends JFrame{
 		this.setResizable(false);
 		
 		Targets.add(new Target(rTarget.getColor(), rTarget.getPoints(), rTarget.getRarity()));
+		rTarget.setRadius(15);
+		blTarget.setRadius(15);
+		bTarget.setRadius(15);
 		genTarget();
 		bar.setValue(0);
 		bar.setBounds(50, 90, 120, 13);
 		Container c = getContentPane();
 		c.add(leg);
+		
 		drawTargets = new Timer(18, new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				leg.draw();
@@ -70,6 +74,8 @@ public class Leg extends JFrame{
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
+		ballCountLabel.setText("x" + ballCount);
+		ballCountLabel.setBounds(25,22,80,10);
 		kickImg = getImg.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 		kickIcon = new ImageIcon(kickImg);
 		kickLabel.setIcon(kickIcon);
@@ -124,6 +130,8 @@ public class Leg extends JFrame{
 						PowerTracker.stop();
 						shakeBar.stop();
 						bar.setBounds(50, 90, 120, 13);
+						ballCount--;
+						ballCountLabel.setText("x" + ballCount);
 					}
 				}
 		});	
@@ -157,10 +165,10 @@ public class Leg extends JFrame{
 		moneyLabel.setText("Coins: " + money);
 		moneyLabel.setBounds(10,7,100,10);
 		leg.add(shopButton);
-		//leg.add(kickButton);
 		leg.add(moneyLabel);
 		leg.add(bar);	
 		leg.add(kickLabel);
+		leg.add(ballCountLabel);
 		animator = new Timer(20, new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					kickEnabled = false;
@@ -262,6 +270,18 @@ public class Leg extends JFrame{
     	
     	return collision;
     }
+    public static void LevelUp(){
+    	Level++;
+    	switch (Level){
+    		case 1: rTarget.setPoints(2); blTarget.setPoints(8); bTarget.setPoints(30); break;
+    		case 2: rTarget.setPoints(3); blTarget.setPoints(10); bTarget.setPoints(35); break;
+    		case 3: rTarget.setPoints(4); blTarget.setPoints(12); bTarget.setPoints(40); break;
+    		case 4: rTarget.setPoints(5); blTarget.setPoints(14); bTarget.setPoints(45); break;
+    		case 5: rTarget.setPoints(6); blTarget.setPoints(16); bTarget.setPoints(50); break;
+    		case 6:	rTarget.setPoints(7); blTarget.setPoints(18); bTarget.setPoints(55); break;
+    		case 7:	rTarget.setPoints(8); blTarget.setPoints(20); bTarget.setPoints(60); break;
+    	}
+    }
     public void genTarget(){ 
     	System.out.println("XX" + numTargetsCounter);
     	for(int j = 0; j < numTargetsCounter; j++){
@@ -280,22 +300,32 @@ public class Leg extends JFrame{
 	    		blTarget.genTarget();
 	    		System.out.println("              " + blTarget.getXCord());
 	    		Targets.add(new Target(blTarget.getColor(), blTarget.getPoints(), blTarget.getRarity()));
-	    		//xCordTarget = blTarget.xCordTarget;
-				//yCordTarget = blTarget.yCordTarget;
-	    		//targetColor = blTarget.getColor();
-	    		//currentPoints = blTarget.getPoints(); 
+	    		
 	    	}
 	    	else if(rnd > blTarget.getRarity() && rnd <= blTarget.getRarity() + bTarget.getRarity()){
 	    		
 	    		bTarget.genTarget();
 	    		Targets.add(new Target(bTarget.getColor(), bTarget.getPoints(), bTarget.getRarity()));
 	    		System.out.println("              " + bTarget.getXCord());
+	    		
 	    	}else{
 	    		rTarget.genTarget();
 	    		Targets.add(new Target(rTarget.getColor(), rTarget.getPoints(), rTarget.getRarity()));
 	    		System.out.println("              " + rTarget.getXCord());
+	    		
 	    	}
-		}
+	    	switch (Level){
+	    		case 1: Targets.get(i).setRadius(15); break;
+	    		case 2: Targets.get(i).setRadius(14); break;
+	    		case 3: Targets.get(i).setRadius(13); break;
+	    		case 4: Targets.get(i).setRadius(12); break;
+	    		case 5: Targets.get(i).setRadius(11); break;
+	    		case 6: Targets.get(i).setRadius(10); break;
+	    		case 7: Targets.get(i).setRadius(9); break;
+	    		case 8: Targets.get(i).setRadius(8); break;
+	    	}
+	    	}
+		
 		leg.draw();
     }
     public static void setBallSize(int size){
@@ -348,6 +378,7 @@ public class Leg extends JFrame{
 		
 		//loop through target array calling paintcomponent(g) on each
 		for(int i=0; i< numTargetsCounter; i++){
+			double r = Targets.get(i).getRadius(), d = Targets.get(i).getRadius()*2;
 			if (Targets.get(i).getColor() == Color.BLACK){
 				if (!(Targets.get(i).getXCord() == -1000)){
 				Targets.get(i).setXCord(Targets.get(i).getXCord()+blTargetSpeed);
@@ -365,9 +396,9 @@ public class Leg extends JFrame{
 					Targets.get(i).setYCord(0);
 				}	
 			}
-			Ellipse2D targetOutter = new Ellipse2D.Double(Targets.get(i).getXCord(),Targets.get(i).getYCord(),30,30);
-			Ellipse2D targetMid = new Ellipse2D.Double(Targets.get(i).getXCord()+5,Targets.get(i).getYCord()+5, 20, 20);
-			Ellipse2D targetInner = new Ellipse2D.Double(Targets.get(i).getXCord()+10,Targets.get(i).getYCord()+10,10,10);
+			Ellipse2D targetOutter = new Ellipse2D.Double(Targets.get(i).getXCord(),Targets.get(i).getYCord(),d,d);
+			Ellipse2D targetMid = new Ellipse2D.Double(Targets.get(i).getXCord()+d/6,Targets.get(i).getYCord()+d/6, d*2/3, d*2/3);
+			Ellipse2D targetInner = new Ellipse2D.Double(Targets.get(i).getXCord()+d/3,Targets.get(i).getYCord()+d/3,d*1/3, d*1/3);
 				g.setColor(Targets.get(i).getColor());
 				g2d.fill(targetOutter);
 				g.setColor(Color.WHITE);
@@ -377,6 +408,7 @@ public class Leg extends JFrame{
 			
 		}	
 		Ellipse2D ball = new Ellipse2D.Double(xCordBall,yCordBall+adjustYLoc, Leg.ballSize, Leg.ballSize);
+		Ellipse2D ballCount = new Ellipse2D.Double(10,21,12,12);
 		//TODO:
 		// 		TRY LOOPING THROUGH THE TARGET DRAWING TO CREATE MULTIPLE INSTANCES OF A TARGET ON THE FRAME.
 		AffineTransform transform = new AffineTransform();
@@ -397,6 +429,7 @@ public class Leg extends JFrame{
 			g.fillOval(69,178,15,15);
 			g.setColor(Shop.getColor());
 			g2d.fill(ball);
+			g2d.fill(ballCount);
 		
 		//Pre: Angle: -2.9 Transform: 0,-8
 		//Post: Angle: -1.4 Transfomr: 0, 0

@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Target{
 	private double xCordTarget = 400, yCordTarget = 40, rand;
-	private int size, points, rarity;
+	private int size, points, rarity, radius;
 	private Boolean paintTarget;
 	private Color color; 
 	public Target(Color color, int points, int rarity){
@@ -32,6 +32,9 @@ public class Target{
 	public int getPoints(){
 		return points;
 	}
+	public void setPoints(int points){
+		this.points = points;
+	}
 	public int getRarity(){
 		return rarity;
 	}
@@ -43,6 +46,12 @@ public class Target{
 	}
 	public double getXCord(){
 		return xCordTarget;
+	}
+	public int getRadius(){
+		return radius;
+	}
+	public void setRadius(int radius){
+		this.radius = radius;
 	}
 	public double getYCord(){
 		return yCordTarget;
